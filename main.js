@@ -1,0 +1,153 @@
+import { setClickSound, click, cheer, fanfare, sparkle, oops, setMuted, isMuted } from './audio.js?v=4';
+import { confettiFrom, shake, ripple } from './effects.js?v=4';
+import { initCursor } from './cursor.js?v=4';
+
+const $ = (s, r = document) => r.querySelector(s);
+const h = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
+const shuffle = a => [...a].sort(() => Math.random() - .5);
+const U = encodeURI;
+const inits = {};
+const sections = [...document.querySelectorAll('main section')];
+let cur = 0;
+
+function mkTF(id, items, labels) {
+  const box = $(id); box.innerHTML = '';
+  items.forEach((q, i) => {
+    const row = h('div', 'card tf tone' + (i % 5), `<div><b>${q.s}</b><p class="rev"></p></div><div><button data-v="1">${labels[0]}</button> <button data-v="0" class="ghost">${labels[1]}</button></div>`);
+    const p = $('p', row);
+    row.querySelectorAll('button').forEach(b => b.onclick = () => {
+      const ok = (b.dataset.v === '1') === q.a;
+      row.classList.remove('ok', 'no'); row.classList.add(ok ? 'ok' : 'no'); p.classList.add('on');
+      if (ok) { p.textContent = '✅ ' + q.e; confettiFrom(b, 60); cheer(); }
+      else { p.textContent = '❌ ¡Casi! Piénsalo otra vez.'; shake(row); oops(); }
+    });
+    box.append(row);
+  });
+}
+
+async function boot() {
+  let D;
+  try { D = await (await fetch('content.json')).json(); }
+  catch (e) { $('#stage').innerHTML = '<p class="card">No se pudo cargar content.json. Abre la página desde GitHub Pages o un servidor local (python servir.py), no con doble clic.</p>'; return; }
+  window.__app = 4;
+  const M = D.meta;
+  setClickSound(U(M.clickSound));
+  document.addEventListener('click', click);
+  addEventListener('pointerdown', e => ripple(e.clientX, e.clientY));
+  initCursor();
+  $('#logoEnd').onerror = e => { e.target.hidden = true; }; $('#logoEnd').src = U(M.logo);
+  $('#coverImg').src = U(M.cover); $('#rioImg').src = U(M.rio); $('#ezqImg').src = U(M.ezequiel);
+  initNav(); initTimer(); initControls(); initNudge();
+  $('#goBtn').onclick = e => { confettiFrom(e.currentTarget, 120); fanfare(); setTimeout(() => show(1), 600); };
+
+  // Misión de lectura: el texto borroso se cambia por la instrucción
+  inits['s-cards'] = () => {
+    const box = $('#cards'); box.innerHTML = '';
+    D.cards.forEach((k, i) => {
+      const b = h('button', 'opt tone' + (i % 5), `<h3 class="c${i % 4 + 1}">${k.ref}</h3><b>${k.title}</b><span class="blurtxt">«${k.verse}»</span><span class="rev">✏️ Busca <mark>${k.ref}</mark> en tus Escrituras y subráyalo.<br><span class="note">${k.q}</span></span>`);
+      b.onclick = () => { if (b.classList.contains('open')) return; b.classList.add('open', 'seen'); confettiFrom(b, 30); sparkle(); };
+      box.append(b);
+    });
+  };
+
+  // Ezequiel 2: leyenda interactiva
+  inits['s-ezq'] = () => {
+    const c = $('#ezqChips'), d = $('#ezqDet'); c.innerHTML = ''; d.className = 'card rev';
+    D.ezq.forEach((x, i) => {
+      const b = h('button', 'chip', x.ref);
+      b.onclick = () => { c.querySelectorAll('.chip').forEach(y => y.classList.remove('on')); b.classList.add('on'); d.className = 'card rev on tone' + (i + 3); d.innerHTML = `<h3>${x.ref}</h3><p>${x.t}</p><p class="note">💭 ${x.q}</p>`; sparkle(); confettiFrom(b, 20); };
+      c.append(b);
+    });
+  };
+
+  inits['s-tf'] = () => mkTF('#tf', D.tf, ['Verdadero', 'Falso']);
+
+  inits['s-match'] = () => {
+    const L = $('#mL'), R = $('#mR'); L.innerHTML = R.innerHTML = ''; L.className = R.className = 'pair';
+    let sel = null, done = 0; const total = D.match.length; $('#matchCount').textContent = `0/${total}`;
+    D.match.forEach((m, i) => { const b = h('button', '', m[0]); b.dataset.k = i; b.onclick = () => { L.querySelectorAll('button').forEach(x => x.classList.remove('sel')); b.classList.add('sel'); sel = b; }; L.append(b); });
+    shuffle(D.match.map((m, i) => [m[1], i])).forEach(([t, i]) => {
+      const b = h('button', '', t); b.dataset.k = i;
+      b.onclick = () => {
+        if (!sel) return;
+        if (sel.dataset.k === b.dataset.k) { const ico = D.match[i][0].split(' ')[0]; sel.classList.remove('sel'); sel.classList.add('done'); b.classList.add('done'); b.innerHTML = '<span class="ic">' + ico + '</span> ' + b.textContent; confettiFrom(b, 50); cheer(); sel = null; done++; $('#matchCount').textContent = `${done}/${total}` + (done === total ? ' 🎉' : ''); if (done === total) fanfare(); }
+        else { b.classList.add('bad'); shake(b); oops(); setTimeout(() => b.classList.remove('bad'), 600); }
+      };
+      R.append(b);
+    });
+  };
+
+  inits['s-apply'] = () => {
+    const box = $('#apply'); box.innerHTML = '';
+    D.apply.forEach((a, k) => {
+      const d = h('div', 'card tone' + [0, 4, 1][k % 3], `<b>${a.s}</b><div class="grid"></div><div class="reflect card rev"></div>`);
+      const g = $('.grid', d), r = $('.reflect', d);
+      a.o.forEach((o, i) => {
+        const b = h('button', 'opt o' + i, o.t);
+        b.onclick = () => { g.querySelectorAll('.opt').forEach(x => x.classList.remove('sel')); b.classList.add('sel'); r.className = 'reflect card rev on tone' + i; r.innerHTML = `<span class="note">💭 ${o.r}</span>`; sparkle(); };
+        g.append(b);
+      });
+      box.append(d);
+    });
+    $('#refOut').textContent = '';
+  };
+  $('#refBtn').onclick = e => { const t = $('#refTxt').value.trim(); if (!t) return; $('#refOut').textContent = '💗 ' + t; confettiFrom(e.currentTarget, 80); fanfare(); };
+
+  inits['s-week'] = () => {
+    const box = $('#week'); box.innerHTML = ''; let saved = [];
+    try { saved = JSON.parse(localStorage.getItem('valientes-ezequiel-week') || '[]'); } catch (e) { /* sin almacenamiento */ }
+    const upd = () => { const n = box.querySelectorAll('.lit').length; $('#weekCount').textContent = `Misiones iluminadas: ${n}/${D.week.length}` + (n === D.week.length ? ' 🏆' : ''); try { localStorage.setItem('valientes-ezequiel-week', JSON.stringify([...box.children].map(x => x.classList.contains('lit')))); } catch (e) { /* ok */ } };
+    D.week.forEach((w, i) => {
+      const [day, ...rest] = w.split(': ');
+      const b = h('button', 'card week tone' + (i % 5), `<span class="spark">✨</span><span><b>${day}</b><br>${rest.join(': ')}</span>`);
+      b.classList.toggle('lit', !!saved[i]);
+      b.onclick = () => { const on = b.classList.toggle('lit'); if (on) { confettiFrom(b, 50); cheer(); } upd(); if (box.querySelectorAll('.lit').length === D.week.length) fanfare(); };
+      box.append(b);
+    });
+    upd();
+  };
+
+  Object.values(inits).forEach(f => f());
+  document.querySelectorAll('.rs').forEach(b => b.onclick = () => {
+    const s = b.closest('section');
+    s.querySelectorAll('.rev.on').forEach(x => x.classList.remove('on')); s.querySelectorAll('.sel,.seen,.open').forEach(x => x.classList.remove('sel', 'seen', 'open'));
+    if (s.id === 's-week') { try { localStorage.removeItem('valientes-ezequiel-week'); } catch (e) { /* ok */ } }
+    inits[s.id]?.(); sparkle();
+  });
+  show(0);
+}
+
+function show(n) {
+  cur = Math.max(0, Math.min(sections.length - 1, n));
+  sections.forEach((s, i) => {
+    s.classList.toggle('on', i === cur);
+    s.querySelectorAll('iframe[data-src]').forEach(f => { const want = i === cur ? f.dataset.src : ''; if (f.getAttribute('src') !== want) f.setAttribute('src', want); }); // el video se detiene al salir
+  });
+  document.querySelectorAll('#dots i').forEach((d, i) => d.classList.toggle('on', i === cur));
+  $('#bar').style.width = ((cur + 1) / sections.length * 100) + '%';
+  const s = sections[cur]; $('#label').textContent = `${cur + 1}/${sections.length} · ${s.dataset.title} · ${s.dataset.time}`;
+  $('#stage').scrollTop = 0;
+}
+function initNav() {
+  sections.forEach((s, i) => { const d = h('i'); d.title = s.dataset.title; d.onclick = () => show(i); $('#dots').append(d); });
+  $('#prev').onclick = () => show(cur - 1);
+  $('#next').onclick = e => { show(cur + 1); confettiFrom(e.currentTarget, 14); };
+  addEventListener('keydown', e => { if (e.target.tagName === 'TEXTAREA') return; if (e.key === 'ArrowRight') show(cur + 1); if (e.key === 'ArrowLeft') show(cur - 1); });
+}
+// Si los niños se quedan quietos 6 s, la próxima cosa por tocar "se menea" para llamar su atención
+function initNudge() {
+  let t; const wake = () => { document.querySelectorAll('.nudge').forEach(x => x.classList.remove('nudge')); clearTimeout(t); t = setTimeout(() => { (sections[cur].querySelector('.opt:not(.open):not(.seen), .tf:not(.ok), button.week:not(.lit), .chip:not(.on)') || $('#next')).classList.add('nudge'); }, 6000); };
+  ['pointermove', 'pointerdown', 'keydown'].forEach(ev => addEventListener(ev, wake, { passive: true })); wake();
+}
+function initTimer() {
+  let sec = 0, run = false; const t = $('#timer'), go = $('#tStart');
+  const fmt = () => { t.textContent = String(Math.floor(sec / 60)).padStart(2, '0') + ':' + String(sec % 60).padStart(2, '0'); t.classList.toggle('late', sec > 1800); };
+  setInterval(() => { if (run) { sec++; fmt(); } }, 1000);
+  go.onclick = () => { run = !run; go.textContent = run ? '⏸' : '▶'; };
+  $('#tReset').onclick = () => { if (confirm('¿Reiniciar el cronómetro?')) { sec = 0; run = false; go.textContent = '▶'; fmt(); } };
+}
+function initControls() {
+  $('#btnSound').onclick = e => { setMuted(!isMuted()); e.currentTarget.textContent = isMuted() ? '🔇' : '🔊'; };
+  $('#btnMotion').onclick = () => document.body.classList.toggle('calm');
+}
+boot();

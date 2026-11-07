@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Valientes: Ezequiel 1–3; 33–34; 36–37; 47</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Nunito:wght@400;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=4">
+</head>
+<body>
+<header class="top">
+  <b class="brand"><span class="c1">Valientes</span> · <span class="c3">Pondré un espíritu nuevo</span></b>
+  <span id="timer" class="timer" role="timer" aria-label="Cronómetro">00:00</span>
+  <button id="tStart" aria-label="Iniciar o pausar cronómetro">▶</button>
+  <button id="tReset" class="ghost" aria-label="Reiniciar cronómetro">↺</button>
+  <button id="btnSound" class="ghost" aria-label="Silenciar sonidos">🔊</button>
+  <button id="btnMotion" class="ghost" aria-label="Reducir animaciones">🐢</button>
+</header>
+<div id="bar" class="bar"></div>
+<main id="stage">
+
+<section id="s-cover" data-title="Portada" data-time="1 min">
+  <img class="coverImg" id="coverImg" alt="Un atalaya vigila desde su torre">
+  <h1 class="t"><span class="c1">Soy un</span> <span class="c3">atalaya</span> <span class="c2">valiente</span></h1>
+  <p class="verseCover">«Hijo de hombre, yo te he puesto por atalaya a la casa de Israel; oirás, pues, la palabra de mi boca».<small>Ezequiel 3:17</small></p>
+  <p class="note" style="text-align:center">Ezequiel 1–3; 33–34; 36–37; 47 · «Pondré un espíritu nuevo dentro de vosotros»</p>
+  <p style="text-align:center"><button id="goBtn" class="big">🎉 ¡Comencemos!</button></p>
+</section>
+
+<section id="s-rio" data-title="El río crece" data-time="3 min">
+  <h2 class="t"><span class="c1">Y el río</span> <span class="c3">aumentará</span></h2>
+  <div class="video vid"><iframe data-src="https://www.youtube-nocookie.com/embed/9wtHJoMls0w" title="Y el río aumentará" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+  <p class="note vidcap">¿Qué cosas cambian cuando el agua del templo llega? (Ezequiel 47:9)</p>
+</section>
+
+<section id="s-cards" data-title="Misión de lectura" data-time="8 min">
+  <div class="head"><h2 class="t"><span class="c1">¡Elige tu</span> <span class="c3">misión</span> <span class="c2">de lectura!</span></h2><button class="rs">↺ Reiniciar</button></div>
+  <img class="bannerImg" id="rioImg" alt="Un río que da vida donde antes había desierto">
+  <p class="note hint">👆 Toca un texto borroso para descubrir tu misión.</p>
+  <div class="grid" id="cards"></div>
+</section>
+
+<section id="s-ezq" data-title="Ezequiel y las Escrituras" data-time="3 min">
+  <div class="head"><h2 class="t"><span class="c3">Ezequiel</span> <span class="c1">y la palabra</span> <span class="c2">de Dios</span></h2><button class="rs">↺ Reiniciar</button></div>
+  <img class="coverImg" id="ezqImg" alt="El profeta Ezequiel con las Escrituras, por Lyle Beddes">
+  <p class="cap">El profeta Ezequiel, por Lyle Beddes · Ezequiel 2</p>
+  <p class="note">Toca para descubrir qué pasó en Ezequiel 2:</p>
+  <div id="ezqChips" class="chips"></div>
+  <div id="ezqDet" class="card rev" aria-live="polite"></div>
+</section>
+
+<section id="s-ata" data-title="Los atalayas" data-time="3 min">
+  <h2 class="t"><span class="c3">Los atalayas</span> <span class="c1">en la torre</span></h2>
+  <div class="video vid"><iframe data-src="https://www.youtube-nocookie.com/embed/Pj53mE7LMu4" title="Los atalayas en la torre" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+  <p class="note vidcap">¿De qué manera nuestro profeta viviente es como un atalaya? (Ezequiel 3:17; 33:1–5)</p>
+</section>
+
+<section id="s-tf" data-title="Verdad o mentira" data-time="4 min">
+  <div class="head"><h2 class="t"><span class="c3">¿Verdad</span> <span class="c2">o mentira?</span> <span class="c1">¡Demuéstralo!</span></h2><button class="rs">↺ Reiniciar</button></div>
+  <p class="note">Mira el mundo de hoy con ojos de atalaya.</p>
+  <div id="tf"></div>
+</section>
+
+<section id="s-match" data-title="Conecta" data-time="2 min">
+  <div class="head"><h2 class="t"><span class="c2">Conecta</span> <span class="c4">los símbolos</span></h2><button class="rs">↺ Reiniciar</button></div>
+  <p>Toca un símbolo y luego su significado. <b id="matchCount"></b></p>
+  <div class="two"><div id="mL"></div><div id="mR"></div></div>
+</section>
+
+<section id="s-apply" data-title="Tu turno" data-time="6 min">
+  <div class="head"><h2 class="t"><span class="c1">Tu turno:</span> <span class="c3">¿qué harías?</span></h2><button class="rs">↺ Reiniciar</button></div>
+  <div id="apply"></div>
+  <div class="card tone4 heart"><b>💭 Para pensar en casa:</b> ¿En qué momento de tu día puedes ser un atalaya o un buen pastor?
+    <textarea id="refTxt" rows="2" maxlength="140" placeholder="Escribe tu idea (se queda solo en esta pantalla)…"></textarea>
+    <button id="refBtn">💗 Guardarla en mi corazón</button><p class="bigheart" id="refOut"></p></div>
+  <p class="note">Aquí nadie se equivoca: platicamos cómo podemos elegir mejor.</p>
+</section>
+
+<section id="s-week" data-title="Misión semanal" data-time="1 min">
+  <div class="head"><h2 class="t"><span class="c3">Misión</span> <span class="c1">de la semana:</span> <span class="c2">¡un corazón nuevo!</span></h2><button class="rs">↺ Reiniciar</button></div>
+  <p class="note">Sugerencias para la semana (no son parte de las Escrituras). Toca las que cumplas.</p>
+  <div id="week"></div><p><b id="weekCount"></b></p>
+  <img class="logo" id="logoEnd" alt="Símbolo de La Iglesia de Jesucristo de los Santos de los Últimos Días">
+</section>
+</main>
+<nav class="bottom">
+  <button id="prev" class="ghost">◀ Atrás</button>
+  <div id="dots" class="dots" aria-label="Secciones"></div>
+  <span id="label" class="label"></span>
+  <button id="next">Siguiente ▶</button>
+</nav>
+<canvas id="fx" aria-hidden="true"></canvas>
+<script type="module" src="main.js?v=4"></script>
+<script>addEventListener('load',()=>setTimeout(()=>{const m=[];if(getComputedStyle(document.documentElement).getPropertyValue('--v').trim()!=='4')m.push('style.css');if(window.__app!==4)m.push('main.js');if(m.length){const d=document.createElement('div');d.style.cssText='position:fixed;z-index:99;left:8px;right:8px;top:70px;background:#fff3cd;border:2px solid #e0a800;padding:10px;border-radius:12px;font:700 14px sans-serif;color:#222';d.textContent='⚠ Archivos desactualizados o ausentes: '+m.join(', ')+'. Súbelos y recarga con Ctrl+Shift+R.';document.body.append(d)}},2500))</script>
+</body>
+</html>
