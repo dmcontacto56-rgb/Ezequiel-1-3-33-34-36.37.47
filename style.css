@@ -60,7 +60,7 @@ section.center,#s-cover{text-align:center}
 body.calm *{animation:none!important;transition:none!important}
 
 /* ---- v4 ---- */
-:root{--v:5}
+:root{--v:6}
 .tone0{--c1:#0887F5;--c2:#24B5EF;background:linear-gradient(135deg,#e6f2ff,#cfe5ff);border-color:#7CB8F0}
 .tone1{--c1:#a850d6;--c2:#C97BF0;background:linear-gradient(135deg,#f8eaff,#ecd5ff);border-color:#C97BF0}
 .tone2{--c1:#6f62d6;--c2:#9589EB;background:linear-gradient(135deg,#eeebff,#dcd7ff);border-color:#9589EB}
@@ -160,3 +160,12 @@ button.week.lit .spark{filter:none;opacity:1;animation:pop .6s}
 .hid .blurtxt{filter:blur(9px);user-select:none;margin:0}
 .hid .msg{display:none;margin:0;font-weight:800;background:rgba(255,255,255,.75);padding:10px 12px;border-radius:14px}
 .hid.open .blurtxt{display:none}.hid.open .msg{display:block;animation:slide .4s}
+
+/* ---- v6: la imagen del río es el fondo de las tarjetas ---- */
+.panBox{height:auto;min-height:0;padding:22px;transition:none}
+.panBox img{z-index:0;-webkit-mask-image:linear-gradient(#000 82%,transparent);mask-image:linear-gradient(#000 82%,transparent)}
+.panBox::after{z-index:0;height:20%}
+.panBox .grid{position:relative;z-index:1;gap:16px;transform-origin:50% 0}
+/* al entrar: las tarjetas se contraen arriba y bajan a su lugar mientras se ve la imagen completa */
+#s-cards.on .grid{animation:cardsDrop 1.3s cubic-bezier(.2,1.05,.3,1) both}
+@keyframes cardsDrop{0%{transform:translateY(-12%) scale(.5);opacity:0}30%{opacity:1}100%{transform:none;opacity:1}}
