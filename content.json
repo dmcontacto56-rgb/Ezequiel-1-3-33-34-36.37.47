@@ -4,7 +4,8 @@
     "clickSound": "gota-de-agua.mp3",
     "cover": "atalaya.jpeg",
     "rio": "WhatsApp Image 2026-11-07 at 4.56.47 PM.jpeg",
-    "ezequiel": "ezequiel.jpeg"
+    "ezequiel": "ezequiel.jpeg",
+    "mision": "elderes y hermanas misioneras.jpg"
   },
   "cards": [
     {
@@ -234,5 +235,44 @@
     "Miércoles: Sé un atalaya: comparte solo información verdadera y buena.",
     "Viernes: Sé un buen pastor: busca a alguien que esté solo.",
     "Domingo: Cuéntale a tu familia cómo la Biblia y el Libro de Mormón te acercan a Jesús."
+  ],
+  "heart": [
+    "Una masa de arcilla sin forma… como un corazón de piedra. Toca para que el Alfarero comience.",
+    "El Alfarero la amasa con paciencia. Somos el barro y Dios nos forma (Isaías 64:8).",
+    "Poco a poco la arcilla va tomando forma.",
+    "¡Ya parece un corazón! Pero todavía está quieto. Toca otra vez.",
+    "«Os daré un corazón nuevo» (Ezequiel 36:26). ¡Está vivo! Cada latido derrama luz, como el arcoíris y el oro resplandeciente. ✨"
+  ],
+  "ez37": [
+    {
+      "ref": "Ezequiel 37:11",
+      "t": "Me dijo luego: Hijo de hombre, todos estos huesos son la casa de Israel. He aquí, ellos dicen: Nuestros huesos se secaron, y pereció nuestra esperanza, y somos del todo talados.",
+      "n": "Donde alguien siente que ya no hay esperanza, hace falta un misionero."
+    },
+    {
+      "ref": "Ezequiel 37:12",
+      "t": "Por tanto, profetiza, y diles: Así ha dicho Jehová el Señor: He aquí yo abro vuestros sepulcros, oh pueblo mío, y os haré subir de vuestras sepulturas y os traeré a la tierra de Israel.",
+      "n": "El Señor manda hablar. Anunciar Su palabra trae vida."
+    },
+    {
+      "ref": "Ezequiel 37:16–17",
+      "t": "Y tú, hijo de hombre, toma ahora un palo, y escribe en él: Para Judá… Toma después otro palo y escribe en él: Para José… Júntalos luego el uno con el otro, para que sean uno solo, y serán uno solo en tu mano.",
+      "n": "La Biblia y el Libro de Mormón, uno solo en la mano del Señor. Los misioneros los comparten."
+    },
+    {
+      "ref": "Ezequiel 37:22",
+      "t": "Y haré de ellos una sola nación en la tierra, en los montes de Israel; y un mismo rey será el rey de todos ellos; y nunca más serán dos naciones, ni nunca más estarán divididos en dos reinos.",
+      "n": "Un solo pueblo, ya no dividido: el recogimiento de Israel."
+    },
+    {
+      "ref": "Ezequiel 37:26",
+      "t": "Y haré con ellos un convenio de paz; será un convenio sempiterno con ellos; y los estableceré y los multiplicaré, y pondré mi santuario entre ellos para siempre.",
+      "n": "Un convenio que no se acaba: eso invitan a hacer los misioneros."
+    },
+    {
+      "ref": "Ezequiel 37:28",
+      "t": "Y sabrán las naciones que yo, Jehová, santifico a Israel, cuando esté mi santuario en medio de ellos para siempre.",
+      "n": "Cuando el templo está en medio de nosotros, todos pueden ver quién es Dios."
+    }
   ]
 }
