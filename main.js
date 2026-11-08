@@ -1,6 +1,6 @@
-import { setClickSound, click, cheer, fanfare, sparkle, oops, setMuted, isMuted } from './audio.js?v=6';
-import { confettiFrom, shake, ripple } from './effects.js?v=6';
-import { initCursor } from './cursor.js?v=6';
+import { setClickSound, click, beat, cheer, fanfare, sparkle, oops, setMuted, isMuted } from './audio.js?v=7';
+import { confettiFrom, shake, ripple } from './effects.js?v=7';
+import { initCursor } from './cursor.js?v=7';
 
 const $ = (s, r = document) => r.querySelector(s);
 const h = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
@@ -25,11 +25,31 @@ function mkTF(id, items, labels) {
   });
 }
 
+// ---- Corazón de arcilla: la masa se transforma (morfología de puntos) en un corazón que late y derrama luz ----
+const HT = [...Array(16)].map((_, k) => k / 16 * Math.PI * 2);
+const circ = r => HT.map(t => [100 + r * Math.sin(t), 105 - r * Math.cos(t)]);
+const HEART = HT.map(t => [100 + 80 * Math.sin(t) ** 3, 98 - 5 * (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t))]);
+const mix = (a, b, k) => a.map((p, i) => [p[0] + (b[i][0] - p[0]) * k, p[1] + (b[i][1] - p[1]) * k]);
+const RR = [50, 64, 48, 68, 54, 62, 46, 66, 52, 60, 47, 65, 55, 63, 49, 61];
+const LUMP = HT.map((t, i) => [100 + RR[i] * Math.sin(t), 105 - RR[i] * Math.cos(t)]);
+const SH = [LUMP, mix(LUMP, circ(60), .75), mix(circ(60), HEART, .55), HEART, HEART];
+const FILL = ['#a9784f', '#b98558', '#b8654a', '#b3443f', '#d0213f'];
+const pathD = P => { const n = P.length; let d = `M${P[0][0]},${P[0][1]}`; for (let i = 0; i < n; i++) { const a = P[(i - 1 + n) % n], b = P[i], c = P[(i + 1) % n], e = P[(i + 2) % n]; d += `C${b[0] + (c[0] - a[0]) / 6},${b[1] + (c[1] - a[1]) / 6} ${c[0] - (e[0] - b[0]) / 6},${c[1] - (e[1] - b[1]) / 6} ${c[0]},${c[1]}`; } return d + 'Z'; };
+let hs = 0, hShape = SH[0], hRaf = 0, hTimer = 0;
+const paint = s => { $('#hpath').setAttribute('d', pathD(hShape)); $('#hpath').style.fill = FILL[s]; $('#hves').style.opacity = s >= 4 ? 1 : 0; };
+function morph(to, s) {
+  const from = hShape, t0 = performance.now(); cancelAnimationFrame(hRaf);
+  (function step(t) { const k = Math.min(1, (t - t0) / 700), e = 1 - Math.pow(1 - k, 3); hShape = mix(from, to, e); paint(s); if (k < 1) hRaf = requestAnimationFrame(step); })(t0);
+}
+function glow() {
+  const box = $('#hbox'), g = h('span', 'glow', '<i class="gold"></i><i class="ring"></i>'); box.append(g); setTimeout(() => g.remove(), 1600);
+}
+
 async function boot() {
   let D;
   try { D = await (await fetch('content.json')).json(); }
   catch (e) { $('#stage').innerHTML = '<p class="card">No se pudo cargar content.json. Abre la página desde GitHub Pages o un servidor local (python servir.py), no con doble clic.</p>'; return; }
-  window.__app = 6;
+  window.__app = 7;
   const M = D.meta;
   setClickSound(U(M.clickSound));
   document.addEventListener('click', click);
@@ -117,6 +137,30 @@ async function boot() {
     });
     upd();
   };
+
+  // Ezequiel 36:23 y 36:26: la arcilla se vuelve corazón
+  inits['s-heart'] = () => {
+    clearInterval(hTimer); cancelAnimationFrame(hRaf); hs = 0; hShape = SH[0];
+    const box = $('#hbox'); box.classList.remove('alive'); box.querySelectorAll('.glow').forEach(x => x.remove());
+    paint(0); $('#hcap').textContent = D.heart[0];
+  };
+  const tapHeart = () => {
+    const box = $('#hbox'); box.classList.add('squash'); setTimeout(() => box.classList.remove('squash'), 520);
+    if (hs < 4) {
+      hs++; morph(SH[hs], hs); $('#hcap').textContent = D.heart[hs]; sparkle(); confettiFrom(box, 14 + hs * 12);
+      if (hs === 4) { fanfare(); box.classList.add('alive'); glow(); beat(); hTimer = setInterval(() => { if (sections[cur].id === 's-heart') { glow(); beat(); } }, 1200); }
+    } else { glow(); sparkle(); confettiFrom(box, 40); }
+  };
+  $('#hbox').onclick = tapHeart; $('#hbox').onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tapHeart(); } };
+
+  // Ezequiel 37 (lo subrayado) + imagen misional con blur
+  inits['s-ez37'] = () => {
+    $('#v37').innerHTML = D.ez37.map((v, i) => `<div class="card tone${i % 5}"><b class="c${i % 4 + 1}">${v.ref}</b><p class="hl">${v.t}</p><p class="note">💭 ${v.n}</p></div>`).join('');
+    $('#misBox').classList.remove('unblur'); $('#misCap').classList.remove('on');
+  };
+  $('#misImg').src = U(M.mision);
+  const showMis = () => { const b = $('#misBox'); if (b.classList.contains('unblur')) return; b.classList.add('unblur'); $('#misCap').classList.add('on'); confettiFrom(b, 100); fanfare(); };
+  $('#misBox').onclick = showMis; $('#misBox').onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showMis(); } };
 
   Object.values(inits).forEach(f => f());
   document.querySelectorAll('.rs').forEach(b => b.onclick = () => {
