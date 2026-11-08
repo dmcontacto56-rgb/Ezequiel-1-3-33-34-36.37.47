@@ -1,6 +1,6 @@
-import { setClickSound, click, cheer, fanfare, sparkle, oops, setMuted, isMuted } from './audio.js?v=4';
-import { confettiFrom, shake, ripple } from './effects.js?v=4';
-import { initCursor } from './cursor.js?v=4';
+import { setClickSound, click, cheer, fanfare, sparkle, oops, setMuted, isMuted } from './audio.js?v=5';
+import { confettiFrom, shake, ripple } from './effects.js?v=5';
+import { initCursor } from './cursor.js?v=5';
 
 const $ = (s, r = document) => r.querySelector(s);
 const h = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
@@ -29,7 +29,7 @@ async function boot() {
   let D;
   try { D = await (await fetch('content.json')).json(); }
   catch (e) { $('#stage').innerHTML = '<p class="card">No se pudo cargar content.json. Abre la página desde GitHub Pages o un servidor local (python servir.py), no con doble clic.</p>'; return; }
-  window.__app = 4;
+  window.__app = 5;
   const M = D.meta;
   setClickSound(U(M.clickSound));
   document.addEventListener('click', click);
@@ -37,25 +37,36 @@ async function boot() {
   initCursor();
   $('#logoEnd').onerror = e => { e.target.hidden = true; }; $('#logoEnd').src = U(M.logo);
   $('#coverImg').src = U(M.cover); $('#rioImg').src = U(M.rio); $('#ezqImg').src = U(M.ezequiel);
-  initNav(); initTimer(); initControls(); initNudge();
+  initNav(); initTimer(); initControls(); initNudge(); initPan();
   $('#goBtn').onclick = e => { confettiFrom(e.currentTarget, 120); fanfare(); setTimeout(() => show(1), 600); };
 
   // Misión de lectura: el texto borroso se cambia por la instrucción
   inits['s-cards'] = () => {
     const box = $('#cards'); box.innerHTML = '';
     D.cards.forEach((k, i) => {
-      const b = h('button', 'opt tone' + (i % 5), `<h3 class="c${i % 4 + 1}">${k.ref}</h3><b>${k.title}</b><span class="blurtxt">«${k.verse}»</span><span class="rev">✏️ Busca <mark>${k.ref}</mark> en tus Escrituras y subráyalo.<br><span class="note">${k.q}</span></span>`);
+      const b = h('button', 'opt tone' + (i % 5), `<h3 class="c${i % 4 + 1}">${k.ref}</h3><b>${k.title}</b><span class="blurtxt">«${k.verse}»</span><span class="rev">✏️ Busca <mark>${k.ref}</mark> en tus Escrituras y subráyalo.<span class="qbox">${k.q}</span></span>`);
       b.onclick = () => { if (b.classList.contains('open')) return; b.classList.add('open', 'seen'); confettiFrom(b, 30); sparkle(); };
       box.append(b);
     });
   };
 
-  // Ezequiel 2: leyenda interactiva
+  // Ezequiel 1 (respuesta oculta) y Ezequiel 2
   inits['s-ezq'] = () => {
     const c = $('#ezqChips'), d = $('#ezqDet'); c.innerHTML = ''; d.className = 'card rev';
     D.ezq.forEach((x, i) => {
       const b = h('button', 'chip', x.ref);
-      b.onclick = () => { c.querySelectorAll('.chip').forEach(y => y.classList.remove('on')); b.classList.add('on'); d.className = 'card rev on tone' + (i + 3); d.innerHTML = `<h3>${x.ref}</h3><p>${x.t}</p><p class="note">💭 ${x.q}</p>`; sparkle(); confettiFrom(b, 20); };
+      b.onclick = () => {
+        c.querySelectorAll('.chip').forEach(y => y.classList.remove('on')); b.classList.add('on'); d.className = 'card rev on tone' + (i + 3);
+        d.innerHTML = x.msg
+          ? `<h3>${x.ref}</h3><div class="hid" tabindex="0" role="button" aria-label="Revelar el mensaje"><p class="blurtxt">${x.t}</p><p class="msg">📖 ${x.msg}</p></div><p class="note hint">👆 Toca el texto borroso</p>`
+          : `<h3>${x.ref}</h3><p>${x.t}</p><p class="note">💭 ${x.q}</p>`;
+        const hd = $('.hid', d);
+        if (hd) {
+          const open = () => { if (hd.classList.contains('open')) return; hd.classList.add('open'); const t = $('.hint', d); if (t) t.remove(); confettiFrom(hd, 50); sparkle(); };
+          hd.onclick = open; hd.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } };
+        }
+        sparkle(); confettiFrom(b, 20);
+      };
       c.append(b);
     });
   };
@@ -133,6 +144,22 @@ function initNav() {
   $('#prev').onclick = () => show(cur - 1);
   $('#next').onclick = e => { show(cur + 1); confettiFrom(e.currentTarget, 14); };
   addEventListener('keydown', e => { if (e.target.tagName === 'TEXTAREA') return; if (e.key === 'ArrowRight') show(cur + 1); if (e.key === 'ArrowLeft') show(cur - 1); });
+}
+// La imagen del río se mueve con el cursor (o sola, suavemente, si no hay movimiento) y la caja mide lo mismo que las tarjetas
+function initPan() {
+  const box = $('#panBox'), img = $('#rioImg'), grid = $('#cards'); let tx = 0, ty = 0, gx = 0, gy = 0, last = 0;
+  const sync = () => { const gh = grid.offsetHeight; box.style.height = Math.round(Math.min(Math.max(gh, 300), innerHeight * .72)) + 'px'; };
+  new ResizeObserver(sync).observe(grid); addEventListener('resize', sync); sync();
+  addEventListener('pointermove', e => { last = Date.now(); gx = -(e.clientX / innerWidth - .5) * 2; gy = -(e.clientY / innerHeight - .5) * 2; }, { passive: true });
+  (function loop(t) {
+    if (!document.body.classList.contains('calm') && sections[cur].id === 's-cards') {
+      if (Date.now() - last > 2500) { gx = Math.sin(t / 1800); gy = Math.cos(t / 2300) * .6; }
+      tx += (gx - tx) * .06; ty += (gy - ty) * .06;
+      const w = box.clientWidth * .07, hh = box.clientHeight * .07;
+      img.style.transform = `translate(${(tx * w).toFixed(1)}px,${(ty * hh).toFixed(1)}px) scale(${1 + Math.abs(tx) * .02})`;
+    }
+    requestAnimationFrame(loop);
+  })(0);
 }
 // Si los niños se quedan quietos 6 s, la próxima cosa por tocar "se menea" para llamar su atención
 function initNudge() {
