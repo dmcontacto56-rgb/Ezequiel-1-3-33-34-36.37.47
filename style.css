@@ -60,7 +60,7 @@ section.center,#s-cover{text-align:center}
 body.calm *{animation:none!important;transition:none!important}
 
 /* ---- v4 ---- */
-:root{--v:6}
+:root{--v:7}
 .tone0{--c1:#0887F5;--c2:#24B5EF;background:linear-gradient(135deg,#e6f2ff,#cfe5ff);border-color:#7CB8F0}
 .tone1{--c1:#a850d6;--c2:#C97BF0;background:linear-gradient(135deg,#f8eaff,#ecd5ff);border-color:#C97BF0}
 .tone2{--c1:#6f62d6;--c2:#9589EB;background:linear-gradient(135deg,#eeebff,#dcd7ff);border-color:#9589EB}
@@ -169,3 +169,21 @@ button.week.lit .spark{filter:none;opacity:1;animation:pop .6s}
 /* al entrar: las tarjetas se contraen arriba y bajan a su lugar mientras se ve la imagen completa */
 #s-cards.on .grid{animation:cardsDrop 1.3s cubic-bezier(.2,1.05,.3,1) both}
 @keyframes cardsDrop{0%{transform:translateY(-12%) scale(.5);opacity:0}30%{opacity:1}100%{transform:none;opacity:1}}
+
+/* ---- v7: corazón de arcilla y Ezequiel 37 ---- */
+.hbox{position:relative;width:min(68vw,320px);margin:6px auto;cursor:pointer}
+.hbox svg{display:block;width:100%;height:auto;overflow:visible}
+#hpath{transition:fill .9s;stroke:rgba(0,0,0,.18);stroke-width:2}
+#hves{opacity:0;transition:opacity .8s}
+.hbox.squash svg{animation:squash .5s}
+.hbox.alive svg{animation:lubdub 1.2s ease-in-out infinite;filter:drop-shadow(0 0 16px #ffd34d) drop-shadow(0 0 30px rgba(255,120,200,.55))}
+.hbox.alive.squash svg{animation:squash .5s}
+@keyframes lubdub{0%,100%{transform:scale(1)}12%{transform:scale(1.13)}24%{transform:scale(1)}36%{transform:scale(1.08)}50%{transform:scale(1)}}
+.glow{position:absolute;inset:0;pointer-events:none;display:grid;place-items:center}
+.glow i{position:absolute;width:70%;aspect-ratio:1;border-radius:50%}
+.glow .ring{background:conic-gradient(#ff4d4d,#ffa94d,#ffe45c,#5ce07a,#4dc3ff,#9a6bff,#ff4dd2,#ff4d4d);-webkit-mask:radial-gradient(circle,transparent 56%,#000 59%,#000 72%,transparent 75%);mask:radial-gradient(circle,transparent 56%,#000 59%,#000 72%,transparent 75%);animation:ringOut 1.5s ease-out forwards}
+.glow .gold{background:radial-gradient(circle,rgba(255,226,110,.95),rgba(255,196,0,.45) 45%,transparent 70%);filter:blur(2px);animation:goldOut 1.5s ease-out forwards}
+@keyframes ringOut{from{transform:scale(.6);opacity:.95}to{transform:scale(2.6);opacity:0}}
+@keyframes goldOut{from{transform:scale(.5);opacity:.9}to{transform:scale(3);opacity:0}}
+.hl{background:rgba(255,196,80,.55);padding:2px 6px;border-radius:8px;margin:6px 0}
+#v37 .card{margin:10px 0}
