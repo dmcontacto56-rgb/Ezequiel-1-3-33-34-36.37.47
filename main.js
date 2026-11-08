@@ -1,6 +1,6 @@
-import { setClickSound, click, cheer, fanfare, sparkle, oops, setMuted, isMuted } from './audio.js?v=5';
-import { confettiFrom, shake, ripple } from './effects.js?v=5';
-import { initCursor } from './cursor.js?v=5';
+import { setClickSound, click, cheer, fanfare, sparkle, oops, setMuted, isMuted } from './audio.js?v=6';
+import { confettiFrom, shake, ripple } from './effects.js?v=6';
+import { initCursor } from './cursor.js?v=6';
 
 const $ = (s, r = document) => r.querySelector(s);
 const h = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
@@ -29,7 +29,7 @@ async function boot() {
   let D;
   try { D = await (await fetch('content.json')).json(); }
   catch (e) { $('#stage').innerHTML = '<p class="card">No se pudo cargar content.json. Abre la página desde GitHub Pages o un servidor local (python servir.py), no con doble clic.</p>'; return; }
-  window.__app = 5;
+  window.__app = 6;
   const M = D.meta;
   setClickSound(U(M.clickSound));
   document.addEventListener('click', click);
@@ -145,11 +145,9 @@ function initNav() {
   $('#next').onclick = e => { show(cur + 1); confettiFrom(e.currentTarget, 14); };
   addEventListener('keydown', e => { if (e.target.tagName === 'TEXTAREA') return; if (e.key === 'ArrowRight') show(cur + 1); if (e.key === 'ArrowLeft') show(cur - 1); });
 }
-// La imagen del río se mueve con el cursor (o sola, suavemente, si no hay movimiento) y la caja mide lo mismo que las tarjetas
+// La imagen del río (fondo de las tarjetas) se mueve con el cursor, o sola suavemente si no hay movimiento
 function initPan() {
-  const box = $('#panBox'), img = $('#rioImg'), grid = $('#cards'); let tx = 0, ty = 0, gx = 0, gy = 0, last = 0;
-  const sync = () => { const gh = grid.offsetHeight; box.style.height = Math.round(Math.min(Math.max(gh, 300), innerHeight * .72)) + 'px'; };
-  new ResizeObserver(sync).observe(grid); addEventListener('resize', sync); sync();
+  const box = $('#panBox'), img = $('#rioImg'); let tx = 0, ty = 0, gx = 0, gy = 0, last = 0;
   addEventListener('pointermove', e => { last = Date.now(); gx = -(e.clientX / innerWidth - .5) * 2; gy = -(e.clientY / innerHeight - .5) * 2; }, { passive: true });
   (function loop(t) {
     if (!document.body.classList.contains('calm') && sections[cur].id === 's-cards') {
