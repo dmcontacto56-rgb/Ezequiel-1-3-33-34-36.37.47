@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Nunito:wght@400;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=6">
+<link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
 <header class="top">
@@ -65,6 +65,28 @@
   <p class="note">Aquí nadie se equivoca: platicamos cómo podemos elegir mejor.</p>
 </section>
 
+<section id="s-heart" data-title="Un corazón nuevo" data-time="5 min">
+  <div class="head"><h2 class="t"><span class="c3">Un corazón</span> <span class="c1">nuevo</span> <span class="c2">de las manos del Alfarero</span></h2><button class="rs">↺ Reiniciar</button></div>
+  <p class="note">Toca la arcilla: con cada toque el Alfarero la va formando. (Isaías 64:8; Ezequiel 36:26)</p>
+  <div class="hbox" id="hbox" role="button" tabindex="0" aria-label="Tocar la arcilla">
+    <svg viewBox="0 0 200 200" aria-hidden="true">
+      <g id="hves" fill="none" stroke="#a8182f" stroke-width="9" stroke-linecap="round"><path d="M90,74C84,48 92,28 78,12"/><path d="M110,74C114,46 126,32 142,26"/><path d="M100,72C100,52 104,38 100,14"/></g>
+      <path id="hpath"/><ellipse id="hshine" cx="68" cy="66" rx="15" ry="8" fill="#fff" opacity=".25" transform="rotate(-30 68 66)"/>
+    </svg>
+  </div>
+  <p class="bigheart" id="hcap" aria-live="polite" style="text-align:center"></p>
+  <div class="card tone1"><span class="note">Ezequiel 36:23</span><p>«Y santificaré mi gran nombre, profanado entre las naciones, el cual profanasteis vosotros en medio de ellas; y sabrán las naciones que yo soy Jehová, dice el Señor, cuando sea santificado en vosotros delante de sus ojos».</p><p class="note">✝️ Nos recuerda a Jesucristo, que sería crucificado para santificar el nombre de Dios y limpiarnos.</p></div>
+  <div class="card tone2"><span class="note">Ezequiel 36:26</span><p>«Y os daré un corazón nuevo, y pondré un espíritu nuevo dentro de vosotros; y quitaré de vuestra carne el corazón de piedra y os daré un corazón de carne».</p><p class="note">🏺 Como el alfarero de Isaías: somos el barro, y Dios nos forma de nuevo.</p></div>
+</section>
+
+<section id="s-ez37" data-title="Ezequiel 37" data-time="6 min">
+  <div class="head"><h2 class="t"><span class="c3">Ezequiel 37:</span> <span class="c1">¡uno en la mano</span> <span class="c2">del Señor!</span></h2><button class="rs">↺ Reiniciar</button></div>
+  <div id="v37"></div>
+  <div class="card tone3 rv imgrv" id="misBox" tabindex="0" role="button" aria-label="Revelar la imagen"><img class="blurtxt" id="misImg" alt="Élderes y hermanas misioneras"></div>
+  <p class="note hint">👆 Toca la imagen para revelarla</p>
+  <div class="card tone4 rev" id="misCap"><b>Élderes y hermanas misioneras</b><p>Reunir, dar vida y hacer «uno» a Israel es la obra misional. Los élderes siempre serán élderes y las hermanas siempre serán misioneras: ministrando a los demás y predicando con el ejemplo.</p><p class="note">💭 ¿Cómo puedes ser misionero hoy, aunque todavía no lleves una placa?</p></div>
+</section>
+
 <section id="s-tf" data-title="Verdad o mentira" data-time="4 min">
   <div class="head"><h2 class="t"><span class="c3">¿Verdad</span> <span class="c2">o mentira?</span> <span class="c1">¡Demuéstralo!</span></h2><button class="rs">↺ Reiniciar</button></div>
   <p class="note">Mira el mundo de hoy con ojos de atalaya.</p>
@@ -91,7 +113,7 @@
   <button id="next">Siguiente ▶</button>
 </nav>
 <canvas id="fx" aria-hidden="true"></canvas>
-<script type="module" src="main.js?v=6"></script>
-<script>addEventListener('load',()=>setTimeout(()=>{const m=[];if(getComputedStyle(document.documentElement).getPropertyValue('--v').trim()!=='6')m.push('style.css');if(window.__app!==6)m.push('main.js');if(m.length){const d=document.createElement('div');d.style.cssText='position:fixed;z-index:99;left:8px;right:8px;top:70px;background:#fff3cd;border:2px solid #e0a800;padding:10px;border-radius:12px;font:700 14px sans-serif;color:#222';d.textContent='⚠ Archivos desactualizados o ausentes: '+m.join(', ')+'. Súbelos y recarga con Ctrl+Shift+R.';document.body.append(d)}},2500))</script>
+<script type="module" src="main.js?v=7"></script>
+<script>addEventListener('load',()=>setTimeout(()=>{const m=[];if(getComputedStyle(document.documentElement).getPropertyValue('--v').trim()!=='7')m.push('style.css');if(window.__app!==7)m.push('main.js');if(m.length){const d=document.createElement('div');d.style.cssText='position:fixed;z-index:99;left:8px;right:8px;top:70px;background:#fff3cd;border:2px solid #e0a800;padding:10px;border-radius:12px;font:700 14px sans-serif;color:#222';d.textContent='⚠ Archivos desactualizados o ausentes: '+m.join(', ')+'. Súbelos y recarga con Ctrl+Shift+R.';document.body.append(d)}},2500))</script>
 </body>
 </html>
